@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Razorpay from 'razorpay';
 import prisma from '../prisma';
+import { extractSubdomain } from '../helper/subdomainHelper';
 
 const razorpay = new Razorpay({
 	key_id: process.env.RAZORPAY_KEY_ID!,
@@ -16,12 +17,7 @@ interface CustomRequest extends Request {
 // Get all courses
 export const AllCourses = async (req: Request, res: Response) => {
 	try {
-		const host = req.headers.host;
-		const subdomain = host?.includes('.') ? host.split('.')[0] : null;
-
-		console.log('HOST, SUBDOMAIN: ', host, subdomain);
-
-		// console.log(subdomain);
+		const subdomain = extractSubdomain(req);
 
 		if (!subdomain) {
 			res.status(400).json({ message: 'Invalid subdomain' });
@@ -99,8 +95,7 @@ export const EnrollInCourse = async (
 	res: Response
 ): Promise<void> => {
 	try {
-		const host = req.headers.host;
-		const subdomain = host?.includes('.') ? host.split('.')[0] : null;
+		const subdomain = extractSubdomain(req);
 
 		if (!subdomain) {
 			res.status(400).json({ message: 'Invalid subdomain' });

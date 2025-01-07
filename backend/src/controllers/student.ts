@@ -7,6 +7,7 @@ import {
 	StudentSignUpSchema,
 	UpdateStudentSchema,
 } from '../zod/validator';
+import { extractSubdomain } from '../helper/subdomainHelper';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -26,8 +27,7 @@ export const Signup = async (req: Request, res: Response): Promise<void> => {
 	}
 
 	try {
-		const host = req.headers.host;
-		const subdomain = host?.includes('.') ? host.split('.')[0] : null;
+		const subdomain = extractSubdomain(req);
 
 		if (!subdomain) {
 			res.status(400).json({ message: 'Invalid subdomain' });
@@ -113,8 +113,7 @@ export const Signin = async (req: Request, res: Response): Promise<void> => {
 	}
 
 	try {
-		const host = req.headers.host;
-		const subdomain = host?.includes('.') ? host.split('.')[0] : null;
+		const subdomain = extractSubdomain(req);
 
 		if (!subdomain) {
 			res.status(400).json({ message: 'Invalid subdomain' });
@@ -232,8 +231,7 @@ export const GetProfile = async (
 	res: Response
 ): Promise<void> => {
 	try {
-		const host = req.headers.host;
-		const subdomain = host?.includes('.') ? host.split('.')[0] : null;
+		const subdomain = extractSubdomain(req);
 
 		if (!subdomain) {
 			res.status(400).json({ message: 'Invalid subdomain' });
@@ -280,8 +278,7 @@ export const getEnrolledCourses = async (
 	res: Response
 ): Promise<void> => {
 	try {
-		const host = req.headers.host;
-		const subdomain = host?.includes('.') ? host.split('.')[0] : null;
+		const subdomain = extractSubdomain(req);
 
 		if (!subdomain) {
 			res.status(400).json({ message: 'Invalid subdomain' });
@@ -329,8 +326,7 @@ export const getEnrolledCourse = async (
 	res: Response
 ): Promise<void> => {
 	try {
-		const host = req.headers.host;
-		const subdomain = host?.includes('.') ? host.split('.')[0] : null;
+		const subdomain = extractSubdomain(req);
 
 		if (!subdomain) {
 			res.status(400).json({ message: 'Invalid subdomain' });

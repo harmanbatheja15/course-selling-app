@@ -7,6 +7,7 @@ import {
 	InstructorSignUpSchema,
 	CourseSchema,
 } from '../zod/validator';
+import { extractSubdomain } from '../helper/subdomainHelper';
 
 function generateSlug(organization: string): string {
 	return organization
@@ -62,8 +63,7 @@ export const getInstructor = async (
 	res: Response
 ): Promise<void> => {
 	try {
-		const host = req.headers.host;
-		const subdomain = host?.includes('.') ? host.split('.')[0] : null;
+		const subdomain = extractSubdomain(req);
 
 		if (!subdomain) {
 			res.status(400).json({ message: 'Invalid subdomain' });
