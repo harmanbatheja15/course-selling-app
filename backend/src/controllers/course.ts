@@ -57,6 +57,7 @@ export const AllCourses = async (req: Request, res: Response) => {
 			courses,
 		});
 	} catch (err) {
+		console.log(err);
 		res.status(500).send({ message: 'Error while fetching courses' });
 	}
 };
