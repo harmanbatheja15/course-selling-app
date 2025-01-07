@@ -6,7 +6,7 @@ export const getSubdomain = () => {
 		return parts[0] || null;
 	} else {
 		try {
-			const parsedUrl = new URL(window.location.hostname);
+			const parsedUrl = new URL(window.location.href);
 			const hostname = parsedUrl.hostname;
 			const parts = hostname.split('.');
 			return parts.length > 2 ? parts[0] : null;
