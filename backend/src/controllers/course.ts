@@ -95,7 +95,7 @@ export const GetCourse = async (req: Request, res: Response): Promise<void> => {
 
 // Create a folder
 export const CreateFolder = async (
-	req: CustomRequest,
+	req: Request,
 	res: Response
 ): Promise<void> => {
 	try {
