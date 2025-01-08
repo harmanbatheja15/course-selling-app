@@ -10,7 +10,7 @@ const ManageCourse = () => {
 	const { fetchCourses } = useCourses();
 	const [course, setCourse] = useState<Course>();
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	const [error, setError] = useState<boolean>(false);
 	const [isUpdateCourseModalOpen, setIsUpdateCourseModalOpen] =
 		useState(false);
 
@@ -32,8 +32,10 @@ const ManageCourse = () => {
 			);
 			setCourse(data.course);
 			setLoading(false);
+			setError(false);
 		} catch (error) {
 			console.log(error);
+			setError(true);
 			setLoading(false);
 		}
 	};

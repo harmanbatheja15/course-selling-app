@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Pencil, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import AddCourse from '../../components/instructor/AddCourse';
-import UpdateCourse from '../../components/instructor/UpdateCourse';
 import useCourses from '../../hooks/useCourses';
 import useStudents from '../../hooks/useInstructorUsers';
 import { Link } from 'react-router-dom';
@@ -156,15 +155,6 @@ const Dashboard = () => {
 														<h1 className='text-lg font-semibold'>
 															{course.title}
 														</h1>
-														{/* <Pencil
-															size={16}
-															className='cursor-pointer'
-															onClick={() =>
-																setIsUpdateCourseModalOpen(
-																	true
-																)
-															}
-														/> */}
 													</div>
 													<p>{course.description}</p>
 													{course.startDate && (
@@ -193,11 +183,6 @@ const Dashboard = () => {
 			{isAddCourseModalOpen && (
 				<AddCourse handleClickAway={handleClickAway} />
 			)}
-
-			{/* Update Course Modal */}
-			{/* {isUpdateCourseModalOpen && (
-				<UpdateCourse handleClickAway={handleClickAway} />
-			)} */}
 		</>
 	);
 };
