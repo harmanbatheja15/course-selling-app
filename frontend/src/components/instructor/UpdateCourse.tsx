@@ -3,21 +3,22 @@ import ClickAwayListener from 'react-click-away-listener';
 import { X } from 'lucide-react';
 import axios from 'axios';
 import { API_URL } from '../../config';
-import useCourses from '../../hooks/useCourses';
+import { Course } from '../../hooks/useCourses';
 
 interface UpdateCourseProps {
 	handleClickAway: () => void;
+	course: Course;
 }
 
-const UpdateCourse = ({ handleClickAway }: UpdateCourseProps) => {
-	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
-	const [price, setPrice] = useState('');
-	const [thumbnailUrl, setThumbnailUrl] = useState('');
-	const [level, setLevel] = useState('Beginner');
-	const [type, setType] = useState('Live');
-	const [startDate, setStartDate] = useState('');
-	const [endDate, setEndDate] = useState('');
+const UpdateCourse = ({ handleClickAway, course }: UpdateCourseProps) => {
+	const [title, setTitle] = useState(course?.title);
+	const [description, setDescription] = useState(course?.description);
+	const [price, setPrice] = useState(course?.price?.toString());
+	const [thumbnailUrl, setThumbnailUrl] = useState(course?.thumbnailUrl);
+	const [level, setLevel] = useState(course?.level);
+	const [type, setType] = useState(course?.type);
+	const [startDate, setStartDate] = useState(course?.startDate);
+	const [endDate, setEndDate] = useState(course?.endDate);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -60,13 +61,12 @@ const UpdateCourse = ({ handleClickAway }: UpdateCourseProps) => {
 				setDescription('');
 				setPrice('');
 				setThumbnailUrl('');
-				setLevel('Beginner');
-				setType('Live');
+				setLevel('');
+				setType('');
 				setStartDate('');
 				setEndDate('');
 				alert('Course added successfully.');
 				handleClickAway();
-				useCourses();
 			})
 			.catch((err) => {
 				console.error(err);
@@ -83,7 +83,7 @@ const UpdateCourse = ({ handleClickAway }: UpdateCourseProps) => {
 						<div className='w-full'>
 							<div className='flex items-center justify-between mb-4'>
 								<h1 className='text-2xl font-medium'>
-									Add Course
+									Update Course
 								</h1>
 								<X
 									className='cursor-pointer'

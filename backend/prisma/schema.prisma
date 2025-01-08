@@ -55,20 +55,42 @@ model Admin {
 }
 
 model Course {
-    id           String       @id @default(cuid())
-    instructorId String
-    instructor   Instructor   @relation(fields: [instructorId], references: [id])
-    title        String
-    description  String?
-    price        Int
-    thumbnailUrl String
-    level        String? // beginner, intermediate, advanced
-    type         Type?
-    startDate    DateTime?
-    endDate      DateTime?
-    enrollments  Enrollment[]
-    createdAt    DateTime     @default(now())
-    updatedAt    DateTime     @updatedAt
+    id            String         @id @default(cuid())
+    instructorId  String
+    instructor    Instructor     @relation(fields: [instructorId], references: [id])
+    title         String
+    description   String?
+    price         Int
+    thumbnailUrl  String
+    level         String? // beginner, intermediate, advanced
+    type          Type?
+    startDate     DateTime?
+    endDate       DateTime?
+    enrollments   Enrollment[]
+    courseFolders CourseFolder[]
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+}
+
+model CourseFolder {
+    id             String          @id @default(uuid())
+    name           String
+    courseId       String
+    course         Course          @relation(fields: [courseId], references: [id])
+    courseContents CourseContent[]
+
+    @@unique([courseId, name])
+}
+
+model CourseContent {
+    id             String       @id @default(uuid())
+    name           String
+    type           ContentTypes
+    url            String
+    courseFolderId String
+    courseFolder   CourseFolder @relation(fields: [courseFolderId], references: [id])
+    createdAt      DateTime     @default(now())
+    updatedAt      DateTime     @updatedAt
 }
 
 model Enrollment {
@@ -85,4 +107,9 @@ model Enrollment {
 enum Type {
     LIVE
     RECORDED
+}
+
+enum ContentTypes {
+    VIDEO
+    ASSIGNMENT
 }

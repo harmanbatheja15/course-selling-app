@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Razorpay from 'razorpay';
 import prisma from '../prisma';
 import { extractSubdomain } from '../helper/subdomainHelper';
+import { CreateFolderSchema } from '../zod/validator';
 
 const razorpay = new Razorpay({
 	key_id: process.env.RAZORPAY_KEY_ID!,
@@ -86,6 +87,68 @@ export const GetCourse = async (req: Request, res: Response) => {
 			message: 'Something went wrong!',
 		});
 		return;
+	}
+};
+
+// Create a folder
+export const CreateFolder = async (req: CustomRequest, res: Response) => {
+	try {
+		const parsedData = CreateFolderSchema.safeParse(req.body);
+		const { courseId } = req.params;
+
+		if (!parsedData.success) {
+			res.status(411).json({ msg: 'Invalid inputs' });
+			return;
+		}
+
+		const instructor = await prisma.instructor.findUnique({
+			where: {
+				id: req.instructorId,
+			},
+		});
+
+		if (!instructor) {
+			res.status(400).json({
+				message: 'Instructor not found!',
+			});
+			return;
+		}
+
+		const courses = await prisma.course.findFirst({
+			where: {
+				instructorId: instructor.id,
+			},
+		});
+
+		if (!courses) {
+			res.status(404).json({ message: 'No courses found' });
+			return;
+		}
+
+		const folderPresent = await prisma.courseFolder.findFirst({
+			where: {
+				courseId,
+				name: parsedData.data.name,
+			},
+		});
+
+		if (folderPresent) {
+			res.status(400).json({
+				message: 'Folder with similar name already exists',
+			});
+			return;
+		}
+
+		const folder = await prisma.courseFolder.create({
+			data: {
+				name: parsedData.data.name,
+				courseId: courseId,
+			},
+		});
+
+		res.json({ message: 'Folder created successfully', folder });
+	} catch (err) {
+		res.status(500).json({ message: 'Internal Server Error' });
 	}
 };
 

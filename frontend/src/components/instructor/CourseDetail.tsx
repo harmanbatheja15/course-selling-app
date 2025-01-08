@@ -61,17 +61,21 @@ const CourseDetail = () => {
 								<p className='leading-relaxed'>
 									{course?.description}
 								</p>
-								{course?.startDate && (
-									<p className='mt-3'>
-										<span className='bg-gray-200 rounded-full py-1 px-3'>
-											{course?.startDate}
-										</span>{' '}
-										to{' '}
-										<span className='bg-gray-200 rounded-full py-1 px-3'>
-											{course?.endDate}
+								<div className='flex items-center mt-3'>
+									{course?.startDate && (
+										<span className='bg-gray-200 rounded-full px-2 py-1 text-xs font-bold mr-2'>
+											{course.startDate.slice(0, 10)}
 										</span>
-									</p>
-								)}
+									)}
+									{course?.endDate && course?.startDate && (
+										<>
+											to
+											<span className='bg-gray-200 rounded-full px-2 py-1 text-xs font-bold ml-2'>
+												{course.endDate.slice(0, 10)}
+											</span>
+										</>
+									)}
+								</div>
 								<div className='flex border-t border-gray-300 mt-5 pt-5'>
 									<button
 										type='submit'

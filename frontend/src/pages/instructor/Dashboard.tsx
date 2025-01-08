@@ -4,10 +4,11 @@ import AddCourse from '../../components/instructor/AddCourse';
 import UpdateCourse from '../../components/instructor/UpdateCourse';
 import useCourses from '../../hooks/useCourses';
 import useStudents from '../../hooks/useInstructorUsers';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
 	const { courses, loading, error, fetchCourses } = useCourses();
-	const { students } = useStudents();
+	const { students, instructor } = useStudents();
 	const [isAddCourseModalOpen, setIsAddCourseModalOpen] = useState(false);
 	const [isUpdateCourseModalOpen, setIsUpdateCourseModalOpen] =
 		useState(false);
@@ -31,8 +32,26 @@ const Dashboard = () => {
 
 	return (
 		<>
-			{/* Cards */}
 			<div className='lg:px-8 px-4 pt-4'>
+				{/* Topbar */}
+				{instructor && (
+					<div className='max-w-screen-lg mx-auto flex items-center justify-between bg-white shadow-md p-4 mb-4 rounded-md'>
+						<div className=''>
+							<h1 className='text-lg font-bold'>
+								Access your site at:{' '}
+								<Link
+									to={`https://${instructor?.slug}.courseselling.xyz`}
+									target='_blank'
+									className='underline text-[#1a0dab]'
+								>
+									https://{instructor?.slug}.courseselling.xyz
+								</Link>
+							</h1>
+						</div>
+					</div>
+				)}
+
+				{/* Cards */}
 				<div className='min-w-screen flex items-center justify-center px-5 py-5'>
 					<div className='w-full max-w-screen-lg'>
 						<div className='-mx-2 md:flex'>
@@ -120,42 +139,48 @@ const Dashboard = () => {
 									key={index}
 								>
 									<div className='rounded-lg mb-4'>
-										<div className='rounded-lg bg-white relative overflow-hidden border'>
-											<div className=''>
-												<img
-													src={course.thumbnailUrl}
-													alt=''
-												/>
-											</div>
-											<div className='p-4 space-y-2'>
-												<div className='flex items-center justify-between'>
-													<h1 className='text-lg font-semibold'>
-														{course.title}
-													</h1>
-													<Pencil
-														size={16}
-														className='cursor-pointer'
-														onClick={() =>
-															setIsUpdateCourseModalOpen(
-																true
-															)
+										<Link
+											to={`/instructor/dashboard/course/${course.id}`}
+										>
+											<div className='rounded-lg bg-white relative overflow-hidden border cursor-pointer'>
+												<div className=''>
+													<img
+														src={
+															course.thumbnailUrl
 														}
+														alt=''
 													/>
 												</div>
-												<p>{course.description}</p>
-												{course.startDate && (
-													<div className='flex items-center text-sm'>
-														Starts on: &nbsp;
-														<span className='bg-gray-200 rounded-full px-2 py-1 text-xs font-bold'>
-															{course.startDate.slice(
-																0,
-																10
-															)}
-														</span>
+												<div className='p-4 space-y-2'>
+													<div className='flex items-center justify-between'>
+														<h1 className='text-lg font-semibold'>
+															{course.title}
+														</h1>
+														{/* <Pencil
+															size={16}
+															className='cursor-pointer'
+															onClick={() =>
+																setIsUpdateCourseModalOpen(
+																	true
+																)
+															}
+														/> */}
 													</div>
-												)}
+													<p>{course.description}</p>
+													{course.startDate && (
+														<div className='flex items-center text-sm'>
+															Starts on: &nbsp;
+															<span className='bg-gray-200 rounded-full px-2 py-1 text-xs font-bold'>
+																{course.startDate.slice(
+																	0,
+																	10
+																)}
+															</span>
+														</div>
+													)}
+												</div>
 											</div>
-										</div>
+										</Link>
 									</div>
 								</div>
 							))
@@ -170,9 +195,9 @@ const Dashboard = () => {
 			)}
 
 			{/* Update Course Modal */}
-			{isUpdateCourseModalOpen && (
+			{/* {isUpdateCourseModalOpen && (
 				<UpdateCourse handleClickAway={handleClickAway} />
-			)}
+			)} */}
 		</>
 	);
 };

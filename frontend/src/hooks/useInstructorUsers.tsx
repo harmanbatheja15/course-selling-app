@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
+import { Instructor } from '../atoms';
 
 export interface Students {
 	title: string;
@@ -15,6 +16,7 @@ export interface Students {
 
 export const useStudents = () => {
 	const [students, setStudents] = useState<Students[]>([]);
+	const [instructor, setInstructor] = useState<Instructor>();
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -32,7 +34,8 @@ export const useStudents = () => {
 						},
 					}
 				);
-				setStudents(response.data.students);
+				setInstructor(response.data.instructor);
+				setStudents(response.data.instructor.students);
 			} catch (err) {
 				setError('Failed to fetch students');
 				console.error(err);
@@ -44,7 +47,7 @@ export const useStudents = () => {
 		fetchInstructorStudents();
 	}, []);
 
-	return { students, loading, error };
+	return { students, instructor, loading, error };
 };
 
 export default useStudents;

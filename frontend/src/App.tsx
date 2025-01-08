@@ -15,6 +15,7 @@ import { TenantLayout } from './components/TenantLayout';
 import { MainLayout } from './components/MainLayout';
 import CourseDetail from './components/instructor/CourseDetail';
 import EnrolledCourses from './components/instructor/EnrolledCourses';
+import ManageCourse from './pages/platform/ManageCourse';
 
 const MainRoutes = () => {
 	return (
@@ -28,6 +29,14 @@ const MainRoutes = () => {
 					element={
 						<ProtectedRoute>
 							<Dashboard />
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path='/instructor/dashboard/course/:courseId'
+					element={
+						<ProtectedRoute>
+							<ManageCourse />
 						</ProtectedRoute>
 					}
 				/>

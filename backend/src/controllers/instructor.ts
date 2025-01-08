@@ -33,7 +33,7 @@ export const getInstructorStudents = async (
 			where: {
 				id: req.instructorId,
 			},
-			select: {
+			include: {
 				students: true,
 			},
 		});
@@ -47,6 +47,7 @@ export const getInstructorStudents = async (
 
 		res.status(200).json({
 			message: 'Students fetched successfully!',
+			instructor,
 			students: instructor?.students,
 		});
 	} catch (error) {

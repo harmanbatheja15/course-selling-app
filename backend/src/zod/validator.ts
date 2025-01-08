@@ -62,3 +62,12 @@ export const UpdateStudentSchema = z.object({
 	email: z.string().email('Invalid email!').optional(),
 	avatar: z.string().url('Invalid URL!').optional(),
 });
+
+export const CreateFolderSchema = z.object({
+	name: z.string().min(2, 'Name must be at least 2 characters long!'),
+});
+
+export const CreateContentSchema = z.object({
+	name: z.string(),
+	folderId: z.string(),
+});
