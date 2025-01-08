@@ -31,7 +31,7 @@ export const deleteImageFromS3 = (prevImageKey: string) => {
 
 	s3.deleteObject(
 		{ Bucket: 'course-app', Key: prevImageKey },
-		function (err, data) {
+		function (err: any, data: any) {
 			if (err) {
 				console.log(err);
 				return;

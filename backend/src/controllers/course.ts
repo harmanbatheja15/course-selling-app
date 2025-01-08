@@ -125,7 +125,7 @@ export const CreateFolder = async (req: CustomRequest, res: Response) => {
 			return;
 		}
 
-		const folderPresent = await prisma.courseFolder.findFirst({
+		const folderPresent = await prisma?.courseFolder.findFirst({
 			where: {
 				courseId,
 				name: parsedData.data.name,
@@ -139,7 +139,7 @@ export const CreateFolder = async (req: CustomRequest, res: Response) => {
 			return;
 		}
 
-		const folder = await prisma.courseFolder.create({
+		const folder = await prisma?.courseFolder.create({
 			data: {
 				name: parsedData.data.name,
 				courseId: courseId,
