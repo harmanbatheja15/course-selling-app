@@ -16,7 +16,10 @@ interface CustomRequest extends Request {
 }
 
 // Get all courses
-export const AllCourses = async (req: Request, res: Response) => {
+export const AllCourses = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	try {
 		const subdomain = extractSubdomain(req);
 
@@ -60,7 +63,7 @@ export const AllCourses = async (req: Request, res: Response) => {
 };
 
 // Get a single course
-export const GetCourse = async (req: Request, res: Response) => {
+export const GetCourse = async (req: Request, res: Response): Promise<void> => {
 	const courseId = req.params.id;
 
 	try {
@@ -91,7 +94,10 @@ export const GetCourse = async (req: Request, res: Response) => {
 };
 
 // Create a folder
-export const CreateFolder = async (req: CustomRequest, res: Response) => {
+export const CreateFolder = async (
+	req: CustomRequest,
+	res: Response
+): Promise<void> => {
 	try {
 		const parsedData = CreateFolderSchema.safeParse(req.body);
 		const { courseId } = req.params;
@@ -125,7 +131,7 @@ export const CreateFolder = async (req: CustomRequest, res: Response) => {
 			return;
 		}
 
-		const folderPresent = await prisma?.courseFolder.findFirst({
+		const folderPresent = await prisma.courseFolder.findFirst({
 			where: {
 				courseId,
 				name: parsedData.data.name,
@@ -139,7 +145,7 @@ export const CreateFolder = async (req: CustomRequest, res: Response) => {
 			return;
 		}
 
-		const folder = await prisma?.courseFolder.create({
+		const folder = await prisma.courseFolder.create({
 			data: {
 				name: parsedData.data.name,
 				courseId: courseId,
