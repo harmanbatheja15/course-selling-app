@@ -13,8 +13,8 @@ const AddCourse = ({ handleClickAway }: AddCourseProps) => {
 	const [description, setDescription] = useState('');
 	const [price, setPrice] = useState('');
 	const [thumbnailUrl, setThumbnailUrl] = useState('');
-	const [level, setLevel] = useState('Beginner');
-	const [type, setType] = useState('Live');
+	const [level, setLevel] = useState('');
+	const [type, setType] = useState('');
 	const [startDate, setStartDate] = useState('');
 	const [endDate, setEndDate] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,19 +50,18 @@ const AddCourse = ({ handleClickAway }: AddCourseProps) => {
 						'Content-Type': 'application/json',
 						Authorization: `Bearer ${token}`,
 					},
-					withCredentials: true,
 				}
 			)
 			.then(() => {
 				setIsSubmitting(false);
-				setTitle('');
-				setDescription('');
-				setPrice('');
-				setThumbnailUrl('');
-				setLevel('Beginner');
-				setType('Live');
-				setStartDate('');
-				setEndDate('');
+				// setTitle('');
+				// setDescription('');
+				// setPrice('');
+				// setThumbnailUrl('');
+				// setLevel('');
+				// setType('');
+				// setStartDate('');
+				// setEndDate('');
 				alert('Course added successfully.');
 				handleClickAway();
 			})
@@ -156,6 +155,9 @@ const AddCourse = ({ handleClickAway }: AddCourseProps) => {
 												setLevel(e.target.value)
 											}
 										>
+											<option value='' disabled selected>
+												Select
+											</option>
 											<option value='Beginner'>
 												Beginner
 											</option>
@@ -179,6 +181,9 @@ const AddCourse = ({ handleClickAway }: AddCourseProps) => {
 												setType(e.target.value)
 											}
 										>
+											<option value='' disabled selected>
+												Select
+											</option>
 											<option value='Live'>Live</option>
 											<option value='Recorded'>
 												Recorded

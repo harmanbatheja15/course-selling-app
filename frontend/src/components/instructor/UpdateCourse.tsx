@@ -4,6 +4,7 @@ import { X } from 'lucide-react';
 import axios from 'axios';
 import { API_URL } from '../../config';
 import { Course } from '../../hooks/useCourses';
+import { useParams } from 'react-router-dom';
 
 interface UpdateCourseProps {
 	handleClickAway: () => void;
@@ -11,6 +12,7 @@ interface UpdateCourseProps {
 }
 
 const UpdateCourse = ({ handleClickAway, course }: UpdateCourseProps) => {
+	const { courseId } = useParams();
 	const [title, setTitle] = useState(course?.title);
 	const [description, setDescription] = useState(course?.description);
 	const [price, setPrice] = useState(course?.price?.toString());
@@ -36,7 +38,7 @@ const UpdateCourse = ({ handleClickAway, course }: UpdateCourseProps) => {
 
 		await axios
 			.put(
-				`${API_URL}/instructor/course`,
+				`${API_URL}/instructor/course/${courseId}`,
 				{
 					title,
 					description,
@@ -52,20 +54,11 @@ const UpdateCourse = ({ handleClickAway, course }: UpdateCourseProps) => {
 						'Content-Type': 'application/json',
 						Authorization: `Bearer ${token}`,
 					},
-					withCredentials: true,
 				}
 			)
 			.then(() => {
 				setIsSubmitting(false);
-				setTitle('');
-				setDescription('');
-				setPrice('');
-				setThumbnailUrl('');
-				setLevel('');
-				setType('');
-				setStartDate('');
-				setEndDate('');
-				alert('Course added successfully.');
+				alert('Course updated successfully.');
 				handleClickAway();
 			})
 			.catch((err) => {
@@ -92,7 +85,6 @@ const UpdateCourse = ({ handleClickAway, course }: UpdateCourseProps) => {
 							</div>
 							<form
 								method='POST'
-								action=''
 								className='w-full space-y-4'
 								onSubmit={handleSubmit}
 							>
@@ -111,8 +103,6 @@ const UpdateCourse = ({ handleClickAway, course }: UpdateCourseProps) => {
 								<div className='text-sm space-y-1'>
 									<label htmlFor=''>Description</label>
 									<textarea
-										name=''
-										id=''
 										rows={4}
 										className='w-full border outline-none rounded-md px-3 py-1 resize-none'
 										value={description}
@@ -150,14 +140,15 @@ const UpdateCourse = ({ handleClickAway, course }: UpdateCourseProps) => {
 									<div className='w-full space-y-1'>
 										<label htmlFor=''>Level</label>
 										<select
-											name=''
-											id=''
 											className='w-full border outline-none rounded-md px-3 py-1'
 											value={level}
 											onChange={(e) =>
 												setLevel(e.target.value)
 											}
 										>
+											<option value='' disabled selected>
+												Select
+											</option>
 											<option value='Beginner'>
 												Beginner
 											</option>
@@ -173,14 +164,15 @@ const UpdateCourse = ({ handleClickAway, course }: UpdateCourseProps) => {
 									<div className='w-full space-y-1'>
 										<label htmlFor=''>Type</label>
 										<select
-											name=''
-											id=''
 											className='w-full border outline-none rounded-md px-3 py-1'
 											value={type}
 											onChange={(e) =>
 												setType(e.target.value)
 											}
 										>
+											<option value='' disabled selected>
+												Select
+											</option>
 											<option value='Live'>Live</option>
 											<option value='Recorded'>
 												Recorded
@@ -194,8 +186,6 @@ const UpdateCourse = ({ handleClickAway, course }: UpdateCourseProps) => {
 										<label htmlFor=''>Start Date</label>
 										<input
 											type='date'
-											name=''
-											id=''
 											className='w-full border outline-none rounded-md px-3 py-1'
 											value={startDate}
 											onChange={(e) =>
@@ -208,8 +198,6 @@ const UpdateCourse = ({ handleClickAway, course }: UpdateCourseProps) => {
 										<label htmlFor=''>End Date</label>
 										<input
 											type='date'
-											name=''
-											id=''
 											className='w-full border outline-none rounded-md px-3 py-1'
 											value={endDate}
 											onChange={(e) =>
