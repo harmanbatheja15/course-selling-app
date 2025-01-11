@@ -41,9 +41,8 @@ export const CourseSchema = z.object({
 		.min(10, 'Description must be at least 10 characters long!'),
 	price: z.number().min(0, 'Price must be a positive number!'),
 	thumbnailUrl: z.string().url('Invalid URL!'),
-	// level: z.enum(['Beginner', 'Intermediate', 'Advanced']),
-	level: z.string().optional(),
-	type: z.enum(['Live', 'Recorded']).optional(),
+	level: z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED']).optional(),
+	type: z.enum(['LIVE', 'RECORDED']).optional(),
 	startDate: z
 		.string()
 		.refine((val) => !isNaN(Date.parse(val)), 'Start date is not valid!')

@@ -247,6 +247,7 @@ export const AddCourse = async (req: Request, res: Response): Promise<void> => {
 				price: parsedData.data.price,
 				thumbnailUrl: parsedData.data.thumbnailUrl,
 				level: parsedData.data.level,
+				type: parsedData.data.type,
 				startDate: parsedStartDate,
 				endDate: parsedEndDate,
 				instructorId: req.instructorId!,

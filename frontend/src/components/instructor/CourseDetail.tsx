@@ -44,21 +44,23 @@ const CourseDetail = () => {
 								src={course?.thumbnailUrl}
 							/>
 							<div className='lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0'>
-								{course?.level && (
-									<h2 className='text-sm title-font text-gray-700 tracking-widest'>
-										{course?.level}
-									</h2>
-								)}
 								<h1 className='text-gray-900 text-4xl title-font font-bold mb-1'>
-									{course?.title}{' '}
-									{course?.type && '-' + course?.type}
+									{course?.title}
 								</h1>
 								<div className='flex mb-4'>
 									<span className='title-font font-medium text-2xl text-gray-900'>
 										₹{course?.price}
 									</span>
 								</div>
-								<p className='leading-relaxed'>
+								<div className='flex'>
+									<span className='bg-gray-200 rounded-full px-2 py-1 text-xs font-bold mr-2'>
+										{course?.level}
+									</span>
+									<span className='bg-gray-200 rounded-full px-2 py-1 text-xs font-bold mr-2'>
+										{course?.type}
+									</span>
+								</div>
+								<p className='leading-relaxed mt-4'>
 									{course?.description}
 								</p>
 								<div className='flex items-center mt-3'>

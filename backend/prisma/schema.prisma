@@ -62,7 +62,7 @@ model Course {
     description   String?
     price         Int
     thumbnailUrl  String
-    level         String? // beginner, intermediate, advanced
+    level         Level?
     type          Type?
     startDate     DateTime?
     endDate       DateTime?
@@ -102,6 +102,12 @@ model Enrollment {
     enrolledAt DateTime @default(now())
 
     @@unique([studentId, courseId])
+}
+
+enum Level {
+    BEGINNER
+    INTERMEDIATE
+    ADVANCED
 }
 
 enum Type {

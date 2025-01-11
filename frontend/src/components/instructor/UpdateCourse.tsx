@@ -149,13 +149,13 @@ const UpdateCourse = ({ handleClickAway, course }: UpdateCourseProps) => {
 											<option value='' disabled selected>
 												Select
 											</option>
-											<option value='Beginner'>
+											<option value='BEGINNER'>
 												Beginner
 											</option>
-											<option value='Intermediate'>
+											<option value='INTERMEDIATE'>
 												Intermediate
 											</option>
-											<option value='Advanced'>
+											<option value='ADVANCED'>
 												Advanced
 											</option>
 										</select>
@@ -173,8 +173,8 @@ const UpdateCourse = ({ handleClickAway, course }: UpdateCourseProps) => {
 											<option value='' disabled selected>
 												Select
 											</option>
-											<option value='Live'>Live</option>
-											<option value='Recorded'>
+											<option value='LIVE'>Live</option>
+											<option value='RECORDED'>
 												Recorded
 											</option>
 										</select>
