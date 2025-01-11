@@ -1,22 +1,37 @@
 import { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import AddCourse from '../../components/instructor/AddCourse';
-import useCourses from '../../hooks/useCourses';
 import useStudents from '../../hooks/useInstructorUsers';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { getCourses } from '../../api/courses';
+import { Error, Loading } from '../../components/LoadingError';
+import { Course } from '../../utils/types';
 
 const Dashboard = () => {
-	const { courses, loading, error, fetchCourses } = useCourses();
+	const { isLoading, error, data } = useQuery({
+		queryKey: ['courses'],
+		queryFn: getCourses,
+	});
+
+	const [courses, setCourses] = useState<Course[]>([]);
 	const { students, instructor } = useStudents();
-	const [isAddCourseModalOpen, setIsAddCourseModalOpen] = useState(false);
+	const [isAddCourseModalOpen, setIsAddCourseModalOpen] =
+		useState<boolean>(false);
 	const [isUpdateCourseModalOpen, setIsUpdateCourseModalOpen] =
-		useState(false);
+		useState<boolean>(false);
 
 	const handleClickAway = () => {
 		setIsAddCourseModalOpen(false);
 		setIsUpdateCourseModalOpen(false);
-		fetchCourses();
+		// fetchCourses();
 	};
+
+	useEffect(() => {
+		if (data?.courses) {
+			setCourses(data.courses);
+		}
+	}, [data]);
 
 	useEffect(() => {
 		if (isAddCourseModalOpen || isUpdateCourseModalOpen) {
@@ -28,6 +43,14 @@ const Dashboard = () => {
 			document.body.style.overflow = 'auto';
 		};
 	}, [isAddCourseModalOpen, isUpdateCourseModalOpen]);
+
+	if (isLoading || !courses) {
+		return <Loading />;
+	}
+
+	if (error) {
+		return <Error />;
+	}
 
 	return (
 		<>
@@ -90,7 +113,7 @@ const Dashboard = () => {
 												Total Revenue
 											</h4>
 											<h3 className='text-3xl text-gray-700 font-semibold leading-tight mt-3'>
-												₹2,00,000
+												₹0
 											</h3>
 										</div>
 									</div>
@@ -117,18 +140,6 @@ const Dashboard = () => {
 							<div className='text-center w-full'>
 								<h1 className='text2xl font-semibold'>
 									No courses found!
-								</h1>
-							</div>
-						) : loading ? (
-							<div className='text-center w-full'>
-								<h1 className='text2xl font-semibold'>
-									Loading...
-								</h1>
-							</div>
-						) : error ? (
-							<div className='text-center w-full'>
-								<h1 className='text2xl font-semibold'>
-									Something went wrong!
 								</h1>
 							</div>
 						) : (

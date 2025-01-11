@@ -1,18 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
-import { Instructor } from '../atoms';
-
-export interface Students {
-	title: string;
-	description: string;
-	price: number;
-	thumbnailUrl: string;
-	level: string;
-	type: string;
-	startDate: string;
-	endDate: string;
-}
+import { Instructor, Students } from '../utils/types';
 
 export const useStudents = () => {
 	const [students, setStudents] = useState<Students[]>([]);

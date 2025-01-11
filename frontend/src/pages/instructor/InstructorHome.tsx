@@ -1,38 +1,35 @@
 import { useState, useEffect } from 'react';
-import { Course } from '../../hooks/useCourses';
-import axios from 'axios';
-import { API_URL } from '../../config';
 import { Link } from 'react-router-dom';
+import { Course } from '../../utils/types';
+import { getCoursesByInstructor } from '../../api/courses';
+import { useQuery } from '@tanstack/react-query';
+import { Error, Loading } from '../../components/LoadingError';
 
 const InstructorHome = () => {
-	const [courses, setCourses] = useState<Course[]>([]);
-	const [loading, setLoading] = useState<boolean>(false);
-	const [error, setError] = useState<string | null>(null);
+	const { isLoading, error, data } = useQuery({
+		queryKey: ['courses'],
+		queryFn: getCoursesByInstructor,
+	});
 
-	const fetchCourses = async () => {
-		setLoading(true);
-		setError(null);
-		try {
-			const response = await axios.get(`${API_URL}/course`);
-			console.log(response.data);
-			setCourses(response.data.courses);
-		} catch (err) {
-			setError('Failed to fetch courses');
-			console.error(err);
-		} finally {
-			setLoading(false);
-		}
-	};
+	const [courses, setCourses] = useState<Course[]>([]);
 
 	useEffect(() => {
-		fetchCourses();
-	}, []);
+		if (data?.courses) {
+			setCourses(data.courses);
+		}
+	}, [data]);
+
+	if (isLoading || !courses) {
+		return <Loading />;
+	}
+
+	if (error) {
+		return <Error />;
+	}
 
 	return (
 		<>
 			<div className='-mx-2 md:flex justify-center mt-8'>
-				{error && <p className='text-center'>Error</p>}
-				{loading && <p className='text-center'>Loading...</p>}
 				{courses.map((course, index) => (
 					<div className='w-full md:w-1/3 px-2' key={index}>
 						<div className='rounded-lg mb-4'>

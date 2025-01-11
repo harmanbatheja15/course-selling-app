@@ -3,8 +3,8 @@ import ClickAwayListener from 'react-click-away-listener';
 import { X } from 'lucide-react';
 import axios from 'axios';
 import { API_URL } from '../../config';
-import { Course } from '../../hooks/useCourses';
 import { useParams } from 'react-router-dom';
+import { Course } from '../../utils/types';
 
 interface UpdateCourseProps {
 	handleClickAway: () => void;

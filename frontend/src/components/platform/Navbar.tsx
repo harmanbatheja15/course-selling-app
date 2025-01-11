@@ -63,7 +63,7 @@ const Navbar = () => {
 					<>
 						<div className='relative'>
 							<Link
-								to='#'
+								to='/instructor/profile'
 								className='w-fit flex items-center justify-center font-medium border rounded-full px-4 py-2'
 								onClick={() =>
 									setIsDropdownOpen(!isDropdownOpen)
@@ -178,7 +178,7 @@ const Navbar = () => {
 								<>
 									<div className='relative'>
 										<Link
-											to='#'
+											to='/instructor/profile'
 											className='flex items-center justify-center font-medium border rounded-full px-4 py-2'
 											onClick={() =>
 												setIsDropdownOpen(

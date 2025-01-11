@@ -16,6 +16,10 @@ import { MainLayout } from './components/MainLayout';
 import CourseDetail from './components/instructor/CourseDetail';
 import EnrolledCourses from './components/instructor/EnrolledCourses';
 import ManageCourse from './pages/platform/ManageCourse';
+import Profile from './pages/platform/Profile';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 const MainRoutes = () => {
 	return (
@@ -37,6 +41,14 @@ const MainRoutes = () => {
 					element={
 						<ProtectedRoute>
 							<ManageCourse />
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path='/instructor/profile'
+					element={
+						<ProtectedRoute>
+							<Profile />
 						</ProtectedRoute>
 					}
 				/>
@@ -73,9 +85,11 @@ const App = () => {
 	return (
 		<>
 			<RecoilRoot>
-				<BrowserRouter>
-					{subdomain ? <TenantRoutes /> : <MainRoutes />}
-				</BrowserRouter>
+				<QueryClientProvider client={queryClient}>
+					<BrowserRouter>
+						{subdomain ? <TenantRoutes /> : <MainRoutes />}
+					</BrowserRouter>
+				</QueryClientProvider>
 			</RecoilRoot>
 		</>
 	);

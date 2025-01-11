@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../config';
-import { Instructor } from '../atoms';
+import { Instructor } from '../utils/types';
 
 export const getInstructor = () => {
 	const [instructor, setInstructor] = useState<Instructor>();

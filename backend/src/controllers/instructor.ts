@@ -379,6 +379,9 @@ export const GetCourse = async (req: Request, res: Response): Promise<void> => {
 				id: courseId,
 				instructorId: instructorId,
 			},
+			include: {
+				courseFolders: true,
+			},
 		});
 
 		if (!course) {

@@ -1,12 +1,8 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from 'axios';
-import {
-	instructorState,
-	tokenState,
-	isAuthenticatedSelector,
-	AuthResponse,
-} from '../atoms';
+import { instructorState, tokenState, isAuthenticatedSelector } from '../atoms';
 import { API_URL } from '../config';
+import { AuthResponse } from '../utils/types';
 
 const api = axios.create({
 	baseURL: `${API_URL}`,

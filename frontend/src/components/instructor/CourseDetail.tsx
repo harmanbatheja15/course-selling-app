@@ -1,41 +1,38 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Course } from '../../hooks/useCourses';
-import axios from 'axios';
-import { API_URL } from '../../config';
+import { Course } from '../../utils/types';
+import { Error, Loading } from '../../components/LoadingError';
+import { useQuery } from '@tanstack/react-query';
+import { getCourseDetail } from '../../api/courses';
 
 const CourseDetail = () => {
 	const { courseId } = useParams();
 
-	const [course, setCourse] = useState<Course>();
-	const [loading, setLoading] = useState<boolean>(false);
-	const [error, setError] = useState<string | null>(null);
+	const { isLoading, error, data } = useQuery({
+		queryKey: ['courses'],
+		queryFn: () => getCourseDetail(courseId!),
+	});
 
-	const fetchCourses = async () => {
-		setLoading(true);
-		setError(null);
-		try {
-			const response = await axios.get(`${API_URL}/course/${courseId}`);
-			console.log(response.data);
-			setCourse(response.data.course);
-		} catch (err) {
-			setError('Failed to fetch courses');
-			console.error(err);
-		} finally {
-			setLoading(false);
-		}
-	};
+	const [course, setCourse] = useState<Course>();
 
 	useEffect(() => {
-		fetchCourses();
-	}, []);
+		if (data?.course) {
+			setCourse(data.course);
+		}
+	}, [data]);
+
+	if (isLoading || !course) {
+		return <Loading />;
+	}
+
+	if (error) {
+		return <Error />;
+	}
 
 	return (
 		<>
 			<section className='text-gray-700 body-font overflow-hidden'>
 				<div className='container px-5 py-24 mx-auto'>
-					{error && <p className='text-center'>Error</p>}
-					{loading && <p className='text-center'>Loading...</p>}
 					{course && (
 						<div className='lg:w-4/5 mx-auto flex flex-wrap items-center'>
 							<img
