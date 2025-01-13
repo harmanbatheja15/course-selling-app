@@ -65,3 +65,24 @@ export const getCourseDetail = async (courseId: string) => {
 		throw error;
 	}
 };
+
+export const getEnrolledCourses = async () => {
+	try {
+		const token = localStorage.getItem('token');
+
+		if (!token) {
+			throw new Error('Authentication token not found');
+		}
+
+		const response = await axios.get(`${API_URL}/student/courses`, {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token}`,
+			},
+		});
+		return response.data;
+	} catch (error) {
+		console.error('Error fetching enrolled courses', error);
+		throw error;
+	}
+};

@@ -85,7 +85,7 @@ model CourseFolder {
 model CourseContent {
     id             String       @id @default(uuid())
     name           String
-    type           ContentTypes
+    type           ContentType
     url            String
     courseFolderId String
     courseFolder   CourseFolder @relation(fields: [courseFolderId], references: [id])
@@ -115,7 +115,7 @@ enum Type {
     RECORDED
 }
 
-enum ContentTypes {
+enum ContentType {
     VIDEO
-    ASSIGNMENT
+    NOTES
 }

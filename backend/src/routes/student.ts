@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import studentAuthMiddleware from '../middlewares/studentAuth';
 import {
+	CheckEnrollment,
 	getEnrolledCourse,
 	getEnrolledCourses,
 	GetProfile,
@@ -28,5 +29,8 @@ router.get('/courses', studentAuthMiddleware, getEnrolledCourses);
 
 // Single Enrolled Course
 router.get('/courses/:courseId', studentAuthMiddleware, getEnrolledCourse);
+
+// Check Enrollment
+router.get('/:courseId', studentAuthMiddleware, CheckEnrollment);
 
 export default router;

@@ -87,7 +87,7 @@ const InstructorNavbar = () => {
 					className={`relative flex items-center justify-between rounded-2xl px-8 py-3`}
 				>
 					<div className=''>
-						<Link to={isAuthenticated ? '/dashboard' : '/'}>
+						<Link to='/'>
 							<img
 								src='https://cdn-icons-png.flaticon.com/512/8238/8238761.png'
 								alt=''

@@ -63,16 +63,19 @@ const studentAuthMiddleware = (
 		}
 
 		// Verify the token
-		const decoded = jwt.verify(token, JWT_SECRET) as { student: string };
+		const decoded = jwt.verify(token, JWT_SECRET) as {
+			studentId: string;
+			role: string;
+		};
 
-		if (!decoded || !decoded.student) {
+		if (!decoded || !decoded.studentId) {
 			res.status(401).json({
 				message: 'Unauthorized: Invalid token!',
 			});
 			return;
 		}
 
-		req.studentId = decoded.student;
+		req.studentId = decoded.studentId;
 		req.role = 'student';
 
 		return next();

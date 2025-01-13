@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../config';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import UpdateCourse from '../../components/instructor/UpdateCourse';
 import { Plus } from 'lucide-react';
 import { Error, Loading } from '../../components/LoadingError';
@@ -107,7 +107,7 @@ const ManageCourse = () => {
 								<p className='leading-relaxed mt-4'>
 									{course?.description}
 								</p>
-								<div className='flex items-center'>
+								<div className='flex items-center mt-3'>
 									{course?.startDate && (
 										<span className='bg-gray-200 rounded-full px-2 py-1 text-xs font-bold mr-2'>
 											{course.startDate.slice(0, 10)}
@@ -122,7 +122,7 @@ const ManageCourse = () => {
 										</>
 									)}
 								</div>
-								<div className='flex border-t border-gray-300 mt-5 pt-5'>
+								<div className='flex border-t border-gray-300 mt-5 pt-5 gap-4'>
 									<button
 										type='submit'
 										className='bg-gray-800 duration-200 focus:outline-none focus:shadow-outline font-medium h-12 hover:bg-gray-900 inline-flex items-center justify-center px-6 text-white tracking-wide transition rounded-lg'
@@ -132,6 +132,16 @@ const ManageCourse = () => {
 									>
 										Edit
 									</button>
+									<Link
+										to={`/instructor/dashboard/course/${courseId}/add`}
+									>
+										<button
+											type='submit'
+											className='bg-gray-800 duration-200 focus:outline-none focus:shadow-outline font-medium h-12 hover:bg-gray-900 inline-flex items-center justify-center px-6 text-white tracking-wide transition rounded-lg'
+										>
+											Add Course Videos
+										</button>
+									</Link>
 								</div>
 							</div>
 						</div>
@@ -171,14 +181,16 @@ const ManageCourse = () => {
 					<div className='w-full flex-wrap flex items-center gap-8 my-10'>
 						{course?.courseFolders &&
 							course?.courseFolders.map((folder, index) => (
-								<div
-									key={index}
-									className='w-fit border py-4 px-8 rounded-full cursor-pointer hover:bg-gray-100'
-								>
-									<h1 className='text-xl font-bold'>
-										{folder?.name}
-									</h1>
-								</div>
+								<Link to={``}>
+									<div
+										key={index}
+										className='w-fit border py-4 px-8 rounded-full cursor-pointer hover:bg-gray-100'
+									>
+										<h1 className='text-xl font-bold'>
+											{folder?.name}
+										</h1>
+									</div>
+								</Link>
 							))}
 					</div>
 				</div>

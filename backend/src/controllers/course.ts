@@ -3,6 +3,12 @@ import Razorpay from 'razorpay';
 import prisma from '../prisma';
 import { extractSubdomain } from '../helper/subdomainHelper';
 import { CreateFolderSchema } from '../zod/validator';
+import { s3Client, uploadVideo } from '../helper/aws';
+import {
+	ListObjectsV2Command,
+	ListObjectsV2CommandInput,
+} from '@aws-sdk/client-s3';
+import path from 'path';
 
 const razorpay = new Razorpay({
 	key_id: process.env.RAZORPAY_KEY_ID!,
@@ -158,6 +164,124 @@ export const CreateFolder = async (
 	}
 };
 
+// Upload video
+export const UploadVideo = async (
+	req: CustomRequest,
+	res: Response
+): Promise<void> => {
+	try {
+		const { name, type, courseId, folderId } = req.body;
+		const video = req.file;
+
+		if (!video) {
+			res.status(400).json({ message: 'No video found' });
+			return;
+		}
+
+		if (!courseId || !folderId) {
+			res.status(400).json({ message: 'Missing courseId or folderId' });
+			return;
+		}
+
+		const course = await prisma.course.findUnique({
+			where: {
+				id: courseId,
+			},
+		});
+
+		if (!course) {
+			res.status(404).json({ message: 'Course not found' });
+			return;
+		}
+
+		const folder = await prisma.courseFolder.findUnique({
+			where: {
+				id: folderId,
+			},
+		});
+
+		if (!folder) {
+			res.status(404).json({ message: 'Folder not found' });
+			return;
+		}
+
+		const result = await uploadVideo(
+			req.instructorId!,
+			courseId,
+			folder.name,
+			video.buffer,
+			name
+		);
+
+		const videoEntry = await prisma.courseContent.create({
+			data: {
+				name: name,
+				url: result.videoUrl,
+				type: type,
+				courseFolderId: folderId,
+			},
+		});
+
+		res.status(200).json({
+			message: 'Video uploaded successfully',
+			video: videoEntry,
+			result,
+		});
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ message: 'Internal Server Error' });
+	}
+};
+
+// List folder contents
+export const ListFolderContents = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
+	try {
+		const { courseId, folderName } = req.params;
+		// const { folderName } = req.query;
+
+		const sanitizedFolderName = path
+			.normalize(folderName)
+			.replace(/^(\.\.(\/|\\|$))+/, '');
+		const prefix = `${req.instructorId}/${courseId}/${sanitizedFolderName}`;
+
+		const params: ListObjectsV2CommandInput = {
+			Bucket: process.env.AWS_BUCKET_NAME!,
+			Prefix: prefix,
+			Delimiter: '/',
+		};
+
+		const data = await s3Client.send(new ListObjectsV2Command(params));
+
+		const folders = (data.CommonPrefixes || []).map(
+			(prefix) => prefix.Prefix!.split('/').slice(-2)[0]
+		);
+
+		const files = (data.Contents || [])
+			.map((item) => ({
+				name: item.Key!.split('/').pop() || '',
+				size: item.Size || 0,
+				lastModified: item.LastModified || new Date(),
+			}))
+			.filter((item) => item.name);
+
+		res.status(200).json({
+			folders,
+			files,
+			path: prefix,
+		});
+	} catch (error) {
+		console.error('Error listing folder contents:', error);
+		throw new Error(
+			`Failed to list folder contents: ${
+				error instanceof Error ? error.message : 'Unknown error'
+			}`
+		);
+	}
+};
+
 // Purchase Course
 export const EnrollInCourse = async (
 	req: CustomRequest,
@@ -220,18 +344,18 @@ export const EnrollInCourse = async (
 		req.courseId = course.id;
 		req.orderId = order.id;
 
-		// const enrollment = await prisma.enrollment.create({
-		// 	data: {
-		// 		studentId: student.id,
-		// 		courseId: course.id,
-		// 	},
-		// });
+		const enrollment = await prisma.enrollment.create({
+			data: {
+				studentId: student.id,
+				courseId: course.id,
+			},
+		});
 
-		// res.status(200).json(enrollment);
 		res.status(200).json({
 			success: true,
 			courseId: course.id,
 			order,
+			enrollment,
 		});
 		return;
 	} catch (error) {
@@ -241,27 +365,15 @@ export const EnrollInCourse = async (
 	}
 };
 
+// Capture Payment
 export const CapturePayment = async (
 	req: CustomRequest,
 	res: Response
 ): Promise<void> => {
 	try {
-		const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
-			req.body;
-		const orderId = req.orderId!;
+		const { razorpay_payment_id, razorpay_order_id } = req.body;
 
 		const body = razorpay_order_id + '|' + razorpay_payment_id;
-		// const expectedSignature = crypto
-		// 	.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET!)
-		// 	.update(body.toString())
-		// 	.digest('hex');
-
-		// const isAuthentic = expectedSignature === razorpay_signature;
-
-		// if (!isAuthentic) {
-		// 	res.status(400).json({ message: 'Payment verification failed' });
-		// 	return;
-		// }
 
 		const payment = await razorpay.payments.fetch(razorpay_payment_id);
 

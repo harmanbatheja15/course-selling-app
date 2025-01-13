@@ -2,8 +2,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/platform/Home';
 import Signup from './pages/platform/Signup';
 import Signin from './pages/platform/Signin';
-// import Navbar from './components/platform/Navbar';
-// import Footer from './components/platform/Footer';
 import { RecoilRoot } from 'recoil';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import Dashboard from './pages/instructor/Dashboard';
@@ -18,6 +16,7 @@ import EnrolledCourses from './components/instructor/EnrolledCourses';
 import ManageCourse from './pages/platform/ManageCourse';
 import Profile from './pages/platform/Profile';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import AddVideo from './pages/platform/AddVideo';
 
 const queryClient = new QueryClient();
 
@@ -49,6 +48,14 @@ const MainRoutes = () => {
 					element={
 						<ProtectedRoute>
 							<Profile />
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path='/instructor/dashboard/course/:courseId/add'
+					element={
+						<ProtectedRoute>
+							<AddVideo />
 						</ProtectedRoute>
 					}
 				/>

@@ -1,4 +1,11 @@
+declare global {
+	interface Window {
+		Razorpay: any;
+	}
+}
+
 export interface CourseFolder {
+	id: string;
 	name: string;
 }
 
@@ -13,6 +20,7 @@ export interface Course {
 	startDate: string;
 	endDate: string;
 	courseFolders?: CourseFolder[];
+	enrollments?: Enrollment[];
 }
 
 export interface Instructor {
@@ -39,4 +47,11 @@ export interface AuthResponse {
 	instructorId: string;
 	token: string;
 	instructor: Instructor;
+}
+
+export interface Enrollment {
+	id: string;
+	courseId: string;
+	studentId: string;
+	course: Course;
 }

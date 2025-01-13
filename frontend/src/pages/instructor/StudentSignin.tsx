@@ -3,10 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock, FaEyeSlash, FaEye } from 'react-icons/fa';
 import { API_URL } from '../../config';
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { tokenState } from '../../atoms';
 
 const StudentSignin = () => {
 	const navigate = useNavigate();
-
+	const [token, setToken] = useRecoilState(tokenState);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
@@ -26,6 +28,7 @@ const StudentSignin = () => {
 			setEmail('');
 			setPassword('');
 			localStorage.setItem('token', response.data.token);
+			setToken(response.data.token);
 			alert('Signed in successfully.');
 			navigate(`/`);
 		} catch (error) {
