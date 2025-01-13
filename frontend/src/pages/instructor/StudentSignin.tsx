@@ -8,6 +8,7 @@ import { tokenState } from '../../atoms';
 
 const StudentSignin = () => {
 	const navigate = useNavigate();
+	// @ts-ignore
 	const [token, setToken] = useRecoilState(tokenState);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
