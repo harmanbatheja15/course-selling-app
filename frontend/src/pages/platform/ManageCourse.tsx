@@ -181,7 +181,7 @@ const ManageCourse = () => {
 					<div className='w-full flex-wrap flex items-center gap-8 my-10'>
 						{course?.courseFolders &&
 							course?.courseFolders.map((folder, index) => (
-								<Link to={``}>
+								<Link to={``} key={index}>
 									<div
 										key={index}
 										className='w-fit border py-4 px-8 rounded-full cursor-pointer hover:bg-gray-100'
