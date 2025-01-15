@@ -66,6 +66,7 @@ const AddVideo = () => {
 							'token'
 						)}`,
 					},
+					withCredentials: true,
 					onUploadProgress: (progressEvent) => {
 						if (progressEvent.total) {
 							const progress = Math.round(
