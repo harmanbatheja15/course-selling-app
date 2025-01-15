@@ -65,6 +65,10 @@ const AddVideo = () => {
 						Authorization: `Bearer ${localStorage.getItem(
 							'token'
 						)}`,
+						'Access-Control-Allow-Origin':
+							import.meta.env.VITE_NODE_ENV === 'production'
+								? 'https://courseselling.xyz'
+								: 'http://localhost:5173',
 					},
 					withCredentials: true,
 					onUploadProgress: (progressEvent) => {
