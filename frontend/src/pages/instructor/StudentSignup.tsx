@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaLock, FaEyeSlash, FaEye } from 'react-icons/fa';
-import axios from 'axios';
-import { API_URL } from '../../config';
+import { useMutation } from '@tanstack/react-query';
+import { StudentSignup as Signup } from '../../api/auth';
 
 const StudentSignup = () => {
 	const navigate = useNavigate();
@@ -11,27 +11,18 @@ const StudentSignup = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
-	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	const mutation = useMutation({
+		mutationFn: () => Signup(name, email, password),
+		onSuccess: () => {
+			alert('Signed up successfully.');
+			navigate('/signin');
+		},
+	});
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		try {
-			setIsSubmitting(true);
-			await axios.post(`${API_URL}/student/signup`, {
-				name,
-				email,
-				password,
-			});
-			setIsSubmitting(false);
-			setName('');
-			setEmail('');
-			setPassword('');
-			alert('Signed up successfully.');
-			navigate('/signin');
-		} catch (error) {
-			console.error(error);
-			setIsSubmitting(false);
-		}
+		mutation.mutate();
 	};
 
 	return (
@@ -136,10 +127,12 @@ const StudentSignup = () => {
 						<div>
 							<button
 								type='submit'
-								disabled={isSubmitting}
+								disabled={mutation.isPending}
 								className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50'
 							>
-								{isSubmitting ? 'Signing up...' : 'Sign up'}
+								{mutation.isPending
+									? 'Signing up...'
+									: 'Sign up'}
 							</button>
 						</div>
 					</form>

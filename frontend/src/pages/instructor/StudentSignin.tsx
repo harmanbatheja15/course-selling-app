@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock, FaEyeSlash, FaEye } from 'react-icons/fa';
-import { API_URL } from '../../config';
-import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { tokenState } from '../../atoms';
+import { useMutation } from '@tanstack/react-query';
+import { StudentSignin as Signin } from '../../api/auth';
 
 const StudentSignin = () => {
 	const navigate = useNavigate();
@@ -13,29 +13,20 @@ const StudentSignin = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
-	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	const mutation = useMutation({
+		mutationFn: () => Signin(email, password),
+		onSuccess: (data) => {
+			localStorage.setItem('token', data);
+			setToken(data);
+			alert('Signed in successfully.');
+			navigate('/');
+		},
+	});
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		try {
-			setIsSubmitting(true);
-
-			const response = await axios.post(`${API_URL}/student/signin`, {
-				email,
-				password,
-			});
-
-			setIsSubmitting(false);
-			setEmail('');
-			setPassword('');
-			localStorage.setItem('token', response.data.token);
-			setToken(response.data.token);
-			alert('Signed in successfully.');
-			navigate(`/`);
-		} catch (error) {
-			console.error(error);
-			setIsSubmitting(false);
-		}
+		mutation.mutate();
 	};
 
 	return (
@@ -116,10 +107,12 @@ const StudentSignin = () => {
 						<div>
 							<button
 								type='submit'
-								disabled={isSubmitting}
+								disabled={mutation.isPending}
 								className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:opacity-50'
 							>
-								{isSubmitting ? 'Signing in...' : 'Sign In'}
+								{mutation.isPending
+									? 'Signing in...'
+									: 'Sign In'}
 							</button>
 						</div>
 					</form>

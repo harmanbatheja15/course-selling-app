@@ -155,7 +155,7 @@ const AddCourse = ({ handleClickAway }: AddCourseProps) => {
 												setLevel(e.target.value)
 											}
 										>
-											<option value='' disabled selected>
+											<option value='' disabled>
 												Select
 											</option>
 											<option value='BEGINNER'>
@@ -181,7 +181,7 @@ const AddCourse = ({ handleClickAway }: AddCourseProps) => {
 												setType(e.target.value)
 											}
 										>
-											<option value='' disabled selected>
+											<option value='' disabled>
 												Select
 											</option>
 											<option value='LIVE'>Live</option>
