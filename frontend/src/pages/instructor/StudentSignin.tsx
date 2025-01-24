@@ -22,6 +22,9 @@ const StudentSignin = () => {
 			alert('Signed in successfully.');
 			navigate('/');
 		},
+		onError: () => {
+			alert('Invalid email or password.');
+		},
 	});
 
 	const handleSubmit = async (e: React.FormEvent) => {

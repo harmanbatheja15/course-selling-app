@@ -25,6 +25,7 @@ const Signin = () => {
 			// window.open('http://test.localhost:5173/dashboard', '_self');
 		} catch (error) {
 			console.error(error);
+			alert('Invalid email or password.');
 			setIsSubmitting(false);
 		}
 	};

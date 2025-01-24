@@ -21,6 +21,7 @@ const ManageCourse = () => {
 	const [isUpdateCourseModalOpen, setIsUpdateCourseModalOpen] =
 		useState(false);
 	const [folderName, setFolderName] = useState('');
+	const [addingFolder, setAddingFolder] = useState(false);
 
 	useEffect(() => {
 		if (data?.course) {
@@ -46,6 +47,7 @@ const ManageCourse = () => {
 	const handleAddFolder = async (e: any) => {
 		e.preventDefault();
 		try {
+			setAddingFolder(true);
 			await axios.post(
 				`${API_URL}/course/createFolder/${courseId}`,
 				{
@@ -60,10 +62,12 @@ const ManageCourse = () => {
 				}
 			);
 			setFolderName('');
-			await refetch();
+			setAddingFolder(false);
 			alert('Folder added successfully!');
+			await refetch();
 		} catch (error) {
 			console.log(error);
+			setAddingFolder(false);
 			alert('Something went wrong!');
 		}
 	};
@@ -169,11 +173,20 @@ const ManageCourse = () => {
 								required
 							/>
 							<button
+								disabled={addingFolder}
 								type='submit'
-								className='flex items-center bg-black px-4 py-2 rounded-lg text-white'
+								className={`flex items-center px-4 py-2 rounded-lg text-white ${
+									addingFolder ? 'bg-gray-600' : 'bg-black'
+								}`}
 							>
-								<Plus size={18} />
-								<span className='pl-2'>Add Folder</span>
+								{addingFolder ? (
+									'Loading...'
+								) : (
+									<>
+										<Plus size={18} />
+										<span className='pl-2'>Add Folder</span>
+									</>
+								)}
 							</button>
 						</form>
 					</div>
