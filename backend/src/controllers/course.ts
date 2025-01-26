@@ -344,18 +344,10 @@ export const EnrollInCourse = async (
 		req.courseId = course.id;
 		req.orderId = order.id;
 
-		const enrollment = await prisma.enrollment.create({
-			data: {
-				studentId: student.id,
-				courseId: course.id,
-			},
-		});
-
 		res.status(200).json({
 			success: true,
 			courseId: course.id,
 			order,
-			enrollment,
 		});
 		return;
 	} catch (error) {
