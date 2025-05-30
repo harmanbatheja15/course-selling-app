@@ -1,5 +1,7 @@
 # Saas Platform for Educators
 
+Created a course-selling platform that allows educators to register and launch their personalised platform to sell online courses. The system supports course management, student enrollment, and payment integration, empowering independent educators to monetize their content easily.
+
 ## Technologies Used:
 
 React, Node, Express, TypeScript, Postgres, Prisma ORM, Tailwind CSS, S3 Bucket, Razorpay Payment Gateawy
